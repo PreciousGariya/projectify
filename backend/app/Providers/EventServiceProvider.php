@@ -2,6 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\TaskCreated;
+use App\Events\TaskDeleted;
+use App\Events\TaskStatusChanged;
+use App\Events\TaskUpdated;
+use App\Listeners\SendTaskCreatedEmailNotification;
+use App\Listeners\SendTaskDeletedEmailNotification;
+use App\Listeners\SendTaskStatusEmailNotification;
+use App\Listeners\SendTaskUpdateEmailNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +26,18 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        TaskStatusChanged::class => [
+            SendTaskStatusEmailNotification::class
+        ],
+        TaskUpdated::class =>[
+            SendTaskUpdateEmailNotification::class
+        ],
+        TaskCreated::class =>[
+            SendTaskCreatedEmailNotification::class
+        ],
+        TaskDeleted::class =>[
+            SendTaskDeletedEmailNotification::class
+        ]
     ];
 
     /**
