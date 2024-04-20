@@ -3,8 +3,8 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-between">
             <h3>Edit Tasks</h3>
             <div class="button">
-                <NuxtLink to="/tasks" class="btn btn-success btn-sm">
-                    <Icon name="ion:list" width="24" height="24"  style="color: white" /> Tasks
+                <NuxtLink to="/tasks" class="btn btn-success btn-sm blue_gradient">
+                    <Icon name="ion:list" width="24" height="24" style="color: white" /> Tasks
                 </NuxtLink>
             </div>
         </div>
@@ -12,37 +12,60 @@
             <form @submit.prevent="UpdateTask">
                 <div class="form-group mt-3">
                     <label for="title">Title</label>
-                    <input v-model="formData.title" class="form-control" type="text" id="title" required>
+                    <input v-model="formData.title" class="form-control" type="text" id="title">
+                    <small class="text-danger" for="" v-if="errors && errors.title">{{ errors.title[0] }}</small>
+
                 </div>
                 <div class="form-group mt-3">
                     <label for="description">Description</label>
                     <textarea v-model="formData.description" class="form-control" id="description"></textarea>
+                    <small class="text-danger" for="" v-if="errors && errors.description">{{ errors.description[0]
+                        }}</small>
+
                 </div>
                 <div class="form-group mt-3">
                     <label for="status">Asign To</label>
-                    <select v-model="formData.user_id" class="form-control" id="status" required>
+                    <select v-model="formData.user_id" class="form-control" id="status">
                         <option value="" selected>--Select user--</option>
                         <option v-for="user in users" :key="user.id" :value="user.id">{{ user.name }}</option>
                     </select>
+                    <small class="text-danger" for="" v-if="errors && errors.user_id">{{ errors.user_id[0] }}</small>
+
                 </div>
-                <div class="form-group mt-3">
-                    <label for="status">Status</label>
-                    <select v-model="formData.status" class="form-control" id="status" required>
-                        <option value="" selected>--Select Default Status--</option>
-                        <option value="pending">Pending</option>
-                        <option value="completed">Completed</option>
-                        <option value="overdue">Overdue</option>
-                    </select>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mt-3">
+                            <label for="status">Status</label>
+                            <select v-model="formData.status" class="form-control" id="status">
+                                <option value="" selected>--Select Default Status--</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="overdue">Overdue</option>
+                            </select>
+                            <small class="text-danger" for="" v-if="errors && errors.status">{{ errors.status[0]
+                                }}</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-3">
+                            <label for="deadline">Deadline</label>
+                        </div>
+                        <div class="card flex justify-content-center">
+                        <Calendar dateFormat="dd/mm/yy" v-model="formData.deadline" :minDate="today" showButtonBar
+                            :manualInput="false" placeholder="d-m-y" style="border: none;" />
+                        <small class="text-danger" for="" v-if="errors && errors.deadline">{{errors.deadline[0]
+                            }}</small>
+                            </div>
+                    </div>
                 </div>
-                <div class="form-group mt-3">
-                    <label for="deadline">Deadline</label>
-                </div>
-                <div class="form-group mt-3">
-                    <Calendar dateFormat="dd/mm/yy" v-model="formData.deadline" :minDate="today" showButtonBar  :manualInput="false" />
-                </div>
-                <button class="btn btn-success mt-4" type="submit">
-                    <Icon name="material-symbols:save-outline" width="24" height="24"  style="color: white" />
-                    Update Task</button>
+
+
+                <button class="btn btn-success mt-4 green_gradient" type="submit">
+                    <Icon name="material-symbols:save-outline" width="24" height="24" style="color: white" />
+                    Update Task
+                </button>
             </form>
         </div>
     </div>
@@ -61,7 +84,7 @@ const errors = ref(null);
 const { $toaster } = useNuxtApp()
 const router = useRouter();
 let today = new Date();
-
+const isButtonDisabled = ref(false);
 const route = useRoute();
 const taskStore = useTaskStore();
 const { task, users } = storeToRefs(taskStore);
@@ -98,23 +121,31 @@ onMounted(async () => {
 
 const UpdateTask = async () => {
     errors.value = null
+    isButtonDisabled.value=true;
     try {
         console.log('formData.value', formData.value);
         await taskStore.updateTask(formData.value, route.params.id);
+        isButtonDisabled.value=false;
         Swal.fire(
             'Awesome!',
             "Task updated Successfully",
             'success',
-            );
+        );
         router.push('/tasks')
     } catch (error) {
-        errors.value = error;
-        Swal.fire(
-            'Opps!',
-            "Something Went Wrong Please try again!!",
-            'error',
-        );
-        console.log('error',error);
+        isButtonDisabled.value=false;
+        if (error.response && error.response.status === 422) {
+            // Validation errors returned from the backend
+            errors.value = error.response.data.errors;
+        } else {
+            // Other errors
+            console.error('Error:', error);
+            Swal.fire(
+                'Opps!',
+                "Something went wrong, please try again!",
+                'error',
+            );
+        }
     }
 }
 

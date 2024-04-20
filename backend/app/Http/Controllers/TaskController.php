@@ -28,6 +28,7 @@ class TaskController extends Controller
             // Fetch tasks with pagination
             $tasks = Task::with(['user', 'createdBy'])
                 ->where('created_by', auth()->guard('api')->user()->id)
+                ->orWhere('user_id', auth()->guard('api')->user()->id)
                 ->skip($offset)
                 ->take($perPage)
                 ->paginate($perPage);
@@ -127,16 +128,16 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CreateTaskRequest $request, string $id)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string',
-            'description' => 'nullable|string',
-            'status' => 'required|in:pending,completed,overdue',
-            'deadline' => 'required|date',
-            'user_id' => 'required|exists:users,id', // Ensure the user_id exists in the users table
-        ]);
-
+        // $validatedData = $request->validate([
+        //     'title' => 'required|string',
+        //     'description' => 'nullable|string',
+        //     'status' => 'required|in:pending,completed,overdue',
+        //     'deadline' => 'required|date',
+        //     'user_id' => 'required|exists:users,id', // Ensure the user_id exists in the users table
+        // ]);
+        $validatedData = $request->validated();
         $task = Task::where('uid', $id)->first();
         if (!$task) {
             return response()->json(['status' => false, 'data' => [], 'message' => 'Task not found.'], 404);

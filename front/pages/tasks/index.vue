@@ -1,16 +1,18 @@
 <template>
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-between">
-            <h3>Tasks</h3>
-            <div class="button">
-                <NuxtLink to="/tasks/add" class="btn btn-success btn-sm">
-                    <Icon name="mdi:plus" width="24" height="24" style="color: white" /> Create New Task
-                </NuxtLink>
+
+        <div class="col-md-12 box">
+            <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-between">
+                <h3>Tasks</h3>
+                <div class="button">
+                    <NuxtLink to="/tasks/add" class="btn btn-success btn-sm blue_gradient">
+                        <Icon name="mdi:plus" width="24" height="24" style="color: white" /> Create New Task
+                    </NuxtLink>
+                </div>
             </div>
-        </div>
-        <div class="col-md-12">
+
             <div class="table">
-                <table class="table table-stripped" style="font-size: 14px;">
+                <table class="table table-bordered" style="font-size: 14px;">
                     <thead>
                         <tr>
                             <td>SN</td>
@@ -25,18 +27,17 @@
                             <td>Action</td>
                         </tr>
                     </thead>
-                    <tbody>
-
+                    <tbody v-if="tasks.length > 0">
                         <tr v-for="(task, index) in tasks" :key="task.id">
                             <td>{{ ++index }}</td>
-                            <td>{{ task.title }}</td>
-                            <td>{{ task.description }}</td>
+                            <td>{{ task.title.substring(0, 20) + '...' }}</td>
+                            <td>{{ task.description.substring(0, 20) + '...'  }}</td>
                             <td>{{ task.deadline_formatted }}
 
                                 <b-badge v-if="task.deadline_left === 'Today'" variant="warning">{{ task.deadline_left
                                     }}</b-badge>
                                 <b-badge v-else-if="task.deadline_left === 'Overdue'" variant="danger">{{
-                            task.deadline_left }}</b-badge>
+                        task.deadline_left }}</b-badge>
                                 <b-badge v-else variant="success">{{ task.deadline_left }}</b-badge>
                             </td>
                             <td>{{ task.user_name }}</td>
@@ -52,17 +53,24 @@
                             <td>{{ task.created_at }}</td>
                             <td>{{ task.updated_at }}</td>
                             <td>
-                                <NuxtLink class="btn btn-primary btn-sm" :to="'/tasks/edit/' + task.uid">
-                                    <Icon name="mdi:pencil" width="24" height="24" style="color: white" />
+                                <NuxtLink class="btn btn-primary btn-sm green_gradient" :to="'/tasks/edit/' + task.uid">
+                                    <Icon name="mdi:pencil" width="16" height="16" style="color: white" />
                                 </NuxtLink>
-                                <button class="btn btn-danger btn-sm" @click="deleteTheTask(task.uid)">
-                                    <Icon name="mdi:trash" width="24" height="24" style="color: white" />
+                                <button class="btn btn-danger btn-sm red_gradient" @click="deleteTheTask(task.uid)">
+                                    <Icon name="mdi:trash" width="16" height="16" style="color: white" />
                                 </button>
                             </td>
                         </tr>
                     </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="10" class="text-center">
+                                <p class="text-center text-muted">No Tasks Found that created by you or asigned to you</p>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
-                <div>
+                <div v-if="tasks.length > 0">
                     <nav aria-label="Page navigation">
                         <ul class="pagination">
                             <!-- Previous Page Link -->

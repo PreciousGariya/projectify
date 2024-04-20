@@ -1,14 +1,22 @@
 <template>
     <div>
             <footer class="py-3 my-4">
-                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
-                </ul>
-                <p class="text-center text-muted">© 2024 Taskify, Inc</p>
+                <p class="text-center text-muted">© 2024 Taskify </p>
+                <p class="text-center text-muted">By: Gokul singh gariya</p>
             </footer>
     </div>
 </template>
+
+
+<style scoped>
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f9fa; /* Background color */
+    border-top: 1px solid #ccc; /* Top border */
+    text-align: center;
+    padding: 10px 0; /* Adjust padding as needed */
+    color: #6c757d; /* Text color */
+}
+</style>

@@ -23,10 +23,24 @@ class CreateTaskRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
-            'description' => 'nullable|string',
+            'description' => 'required|string|max:1000',
             // 'status' => 'required|in:pending,completed,overdue',
             'deadline' => 'required|date',
             'user_id' => 'required|exists:users,id',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'The title field is required.',
+            'title.string' => 'The title must be a string.',
+            'description.required'=>'The description field is required.',
+            'description.string'=>'The description must be a string.',
+            'deadline.required' => 'The deadline field is required.',
+            'deadline.date' => 'The deadline must be a valid date.',
+            'user_id.required' => 'The user field is required.',
+            'user_id.exists' => 'The selected user is invalid.',
         ];
     }
 }

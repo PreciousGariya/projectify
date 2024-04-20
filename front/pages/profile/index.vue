@@ -6,20 +6,21 @@
                 <div class="form-group mt-4">
                     <input class="form-control" type="text" name="name" :value="full_name" placeholder="Name" readonly>
                 </div>
-                
+
                 <div class="form-group mt-4">
-                    <input class="form-control"  type="text" name="name" :value="email" placeholder="Email" readonly>
+                    <input class="form-control" type="text" name="name" :value="email" placeholder="Email" readonly>
                 </div>
 
                 <div class="form-group">
-                    <input v-if="email_verified_at" class="form-control"  type="text" name="name" value="Verified" placeholder="Email verify">
+                    <input v-if="email_verified_at" class="form-control" type="text" name="name" value="Verified"
+                        placeholder="Email verify">
                     <div class="mt-4" v-else>
-                        <Button class="btn btn-success">Resend verification email</Button>
+                        <Button class="btn btn-success green_gradient" disabled>Resend verification email</Button>
                     </div>
                 </div>
-               
+
             </form>
-            
+
         </div>
     </div>
 </template>
@@ -32,7 +33,7 @@ const router = useRouter()
 const userStore = useUserStore()
 const showDrop = ref(false)
 const { email, id,
-    full_name,email_verified_at } = storeToRefs(userStore)
+    full_name, email_verified_at } = storeToRefs(userStore)
 definePageMeta({
     layout: "custom",
     middleware: 'is-logged-out'

@@ -12,7 +12,7 @@
                         <a href="#" @click="showDrop = !showDrop" :title="email"
                             class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ full_name }}
+                            <span>{{ full_name ?? ' ' }}</span>
                         </a>
                         <ul v-if="showDrop" class="dropdown-menu text-small" aria-labelledby="dropdownUser1"
                             style="display: block;">
@@ -56,7 +56,7 @@ const logout = async () => {
     }).then(async (result) => {
         if (result.isConfirmed) {
             await userStore.logout();
-            localStorage.removeItem('token');
+            localStorage.removeItem('projectify_token');
             await Swal.fire({
                 title: "Logout!",
                 text: "You are logged out successfully.",
@@ -67,6 +67,5 @@ const logout = async () => {
     });
 
 }
-
 
 </script>

@@ -6,7 +6,7 @@ export default defineNuxtPlugin((NuxtApp) => {
     axios.defaults.withCredentials = false;
     axios.defaults.proxyHeaders = false;
     if(process.client){
-        const token = window.localStorage.getItem('token');
+        const token = window.localStorage.getItem('projectify_token');
         if(token){
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
         }

@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   },
   modules: ['@bootstrap-vue-next/nuxt', 
   '@pinia/nuxt', // needed
-  '@pinia-plugin-persistedstate/nuxt','nuxt-icon','nuxt-primevue'
+  '@pinia-plugin-persistedstate/nuxt','nuxt-icon','nuxt-primevue',
   ],
     primevue: {
       options: {

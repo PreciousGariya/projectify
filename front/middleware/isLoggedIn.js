@@ -8,6 +8,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     }
 
     if (to.fullPath === '/register' && userStore.id) {
-        return navigateTo('/')
+        return navigateTo('/login')
     }
 })
